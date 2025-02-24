@@ -1,5 +1,7 @@
-import random
 from time import sleep
+
+from visualizer import GameVisualizer
+
 
 class Grid:
     def __init__(self, rows, cols):
@@ -56,12 +58,15 @@ def main():
     # Create a 20x20 grid
     grid = Grid(20, 20)
     
-    # Run the simulation for 50 generations
-    for _ in range(50):
-        grid.display()
-        grid.next_generation()
-        sleep(0.2)  # Add a small delay to make the animation visible
-        print("\033[H\033[J", end="")  # Clear the console (UNIX/Linux/MacOS)
+    visualizer = GameVisualizer()
+    while True:
+        running, paused, mouse_pos = visualizer.handle_events()
+        if not running:
+            break
+        if not paused:
+            visualizer.draw_grid(grid.grid)
+            grid.next_generation()
+            sleep(0.2)  # Add a small delay to make the animation visible
 
 if __name__ == "__main__":
-    main() 
+    main()
