@@ -1,4 +1,3 @@
-# pylint: disable=C0114, C0115, C0116
 import pygame
 
 class GameVisualizer:
@@ -17,12 +16,11 @@ class GameVisualizer:
         self.height = height
         self.screen = pygame.display.set_mode((width, height))
         pygame.display.set_caption("Game of Life")
-        
+
         # Colors
-        self.BLACK = (0, 0, 0)
-        self.WHITE = (255, 255, 255)
-        self.GRAY = (128, 128, 128)
-        
+        self.bg_color = (0, 0, 0)
+        self.fg_color = (255, 255, 255)
+
         # Calculate grid dimensions
         self.cols = width // cell_size
         self.rows = height // cell_size
@@ -34,12 +32,12 @@ class GameVisualizer:
         Args:
             grid (list): 2D list representing the game grid
         """
-        self.screen.fill(self.BLACK)
+        self.screen.fill(self.bg_color)
 
         # Draw cells
         for row in range(min(len(grid), self.rows)):
             for col in range(min(len(grid[0]), self.cols)):
-                color = self.WHITE if grid[row][col] else self.BLACK
+                color = self.fg_color if grid[row][col] else self.bg_color
                 pygame.draw.rect(self.screen,
                                color,
                                (col * self.cell_size,
@@ -68,7 +66,7 @@ class GameVisualizer:
                     paused = not paused
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
-    
+
         return running, paused, mouse_pos
 
     def get_cell_position(self, mouse_pos):
