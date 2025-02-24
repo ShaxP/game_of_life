@@ -69,7 +69,7 @@ In `game_of_life.py`, implement the following methods in the `Grid` class:
 
 ### 2. Rules of the Game
 
-1. Any live cell with fewer than two live neighbors dies (underpopulation)
+1. Any live cell with fewer than two live neighbors dies (under-population)
 2. Any live cell with two or three live neighbors lives on to the next generation
 3. Any live cell with more than three live neighbors dies (overpopulation)
 4. Any dead cell with exactly three live neighbors becomes a live cell (reproduction)
