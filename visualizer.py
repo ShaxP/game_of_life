@@ -1,5 +1,5 @@
+# pylint: disable=C0114, C0115, C0116
 import pygame
-import time
 
 class GameVisualizer:
     def __init__(self, cell_size=20, width=800, height=600):
@@ -35,7 +35,7 @@ class GameVisualizer:
             grid (list): 2D list representing the game grid
         """
         self.screen.fill(self.BLACK)
-        
+
         # Draw cells
         for row in range(min(len(grid), self.rows)):
             for col in range(min(len(grid[0]), self.cols)):
@@ -46,7 +46,7 @@ class GameVisualizer:
                                 row * self.cell_size,
                                 self.cell_size - 1,
                                 self.cell_size - 1))
-        
+
         pygame.display.flip()
 
     def handle_events(self):
@@ -59,7 +59,7 @@ class GameVisualizer:
         running = True
         paused = False
         mouse_pos = None
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -68,7 +68,7 @@ class GameVisualizer:
                     paused = not paused
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
-                
+    
         return running, paused, mouse_pos
 
     def get_cell_position(self, mouse_pos):
@@ -90,4 +90,4 @@ class GameVisualizer:
         """
         Clean up PyGame resources.
         """
-        pygame.quit() 
+        pygame.quit()
