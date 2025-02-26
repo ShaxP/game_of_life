@@ -1,7 +1,4 @@
-# pylint: disable=C0114, C0115, C0116
-
-from game_of_life import Grid
-
+from grid import Grid
 
 def test_grid_initialization():
     grid = Grid(5, 5)
