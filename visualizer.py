@@ -40,7 +40,7 @@ class GameVisualizer:
         # Draw cells
         for row in range(self.grid.rows):
             for col in range(self.grid.cols):
-                color = self.fg_color if self.grid.grid[row][col] else self.bg_color
+                color = self.fg_color if self.grid.cell_at(row, col) else self.bg_color
                 pygame.draw.rect(self.screen,
                                color,
                                (col * self.cell_size,
