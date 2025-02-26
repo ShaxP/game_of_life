@@ -1,43 +1,46 @@
+import sys
 import pygame
 
+from grid import Grid
+
 class GameVisualizer:
-    def __init__(self, cell_size=20, width=800, height=600):
+    def __init__(self, grid: Grid, cell_size=20, fps=10):
         """
         Initialize the PyGame visualizer.
         
         Args:
+            grid (Grid): The grid to visualize
             cell_size (int): Size of each cell in pixels
-            width (int): Window width in pixels
-            height (int): Window height in pixels
+            fps (int): Frames per second
         """
         pygame.init()
+        self.grid = grid
         self.cell_size = cell_size
-        self.width = width
-        self.height = height
-        self.screen = pygame.display.set_mode((width, height))
+        self.width = cell_size * grid.cols
+        self.height = cell_size * grid.rows
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.clock = pygame.time.Clock()
+        self.fps = fps
+        self.running = True
+        self.paused = False
+        self.mouse_pos = None
         pygame.display.set_caption("Game of Life")
 
         # Colors
         self.bg_color = (0, 0, 0)
         self.fg_color = (255, 255, 255)
 
-        # Calculate grid dimensions
-        self.cols = width // cell_size
-        self.rows = height // cell_size
 
-    def draw_grid(self, grid):
+    def draw_grid(self):
         """
         Draw the current state of the grid.
-        
-        Args:
-            grid (list): 2D list representing the game grid
         """
         self.screen.fill(self.bg_color)
 
         # Draw cells
-        for row in range(min(len(grid), self.rows)):
-            for col in range(min(len(grid[0]), self.cols)):
-                color = self.fg_color if grid[row][col] else self.bg_color
+        for row in range(self.grid.rows):
+            for col in range(self.grid.cols):
+                color = self.fg_color if self.grid.grid[row][col] else self.bg_color
                 pygame.draw.rect(self.screen,
                                color,
                                (col * self.cell_size,
@@ -47,27 +50,32 @@ class GameVisualizer:
 
         pygame.display.flip()
 
+    def loop(self):
+        while True:
+            self.handle_events()
+            if not self.running:
+                self.cleanup()
+                sys.exit()
+            if not self.paused:
+                self.draw_grid()
+                self.grid.next_generation()
+                self.clock.tick(self.fps)
+
+
     def handle_events(self):
         """
         Handle PyGame events.
         
-        Returns:
-            tuple: (running, paused, mouse_pos)
         """
-        running = True
-        paused = False
-        mouse_pos = None
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    paused = not paused
+                    self.paused = not self.paused
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = event.pos
-
-        return running, paused, mouse_pos
+                self.mouse_pos = event.pos
 
     def get_cell_position(self, mouse_pos):
         """
