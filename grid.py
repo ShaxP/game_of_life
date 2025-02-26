@@ -9,8 +9,24 @@ class Grid:
         """
         self.rows = rows
         self.cols = cols
-        self.grid = None
+        self._grid = None
         self.initialize_grid()
+
+    @classmethod
+    def from_matrix(cls, matrix):
+        """
+        Create a Grid from a matrix.
+        """
+        grid = cls(len(matrix), len(matrix[0]))
+        grid._grid = matrix
+        return grid
+
+    @property
+    def grid(self):
+        """
+        Get the grid.
+        """
+        return self._grid
 
     def initialize_grid(self):
         """
@@ -41,10 +57,8 @@ class Grid:
         # TODO: Implement this method
         pass
 
-    def display(self):
+    def cell_at(self, row, col):
         """
-        Display the current state of the grid.
-        Use 'O' for live cells and '.' for dead cells.
+        Get the value of a cell at a specific position.
         """
-        # TODO: Implement this method
         pass
