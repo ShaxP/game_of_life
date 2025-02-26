@@ -11,15 +11,31 @@ class Grid:
         """
         self.rows = rows
         self.cols = cols
-        self.grid = None
+        self._grid = None
         self.initialize_grid()
+
+    @classmethod
+    def from_matrix(cls, matrix):
+        """
+        Create a Grid from a matrix.
+        """
+        grid = cls(len(matrix), len(matrix[0]))
+        grid._grid = matrix
+        return grid
+
+    @property
+    def grid(self):
+        """
+        Get the grid.
+        """
+        return self._grid
 
     def initialize_grid(self):
         """
         Initialize the grid with random live/dead cells.
         Live cells are represented by 1, dead cells by 0.
         """
-        self.grid = [[random.randint(0, 1) for _ in range(self.cols)] for _ in range(self.rows)]
+        self._grid = [[random.randint(0, 1) for _ in range(self.cols)] for _ in range(self.rows)]
 
     def get_neighbors(self, row, col):
         """
@@ -40,7 +56,7 @@ class Grid:
                 n_row = row + i
                 n_col = col + j
                 if 0 <= n_row < self.rows and 0 <= n_col < self.cols:
-                    neighbors += self.grid[n_row][n_col]
+                    neighbors += self._grid[n_row][n_col]
         return neighbors
 
     def next_generation(self):
@@ -53,15 +69,21 @@ class Grid:
                 neighbors = self.get_neighbors(row, col)
 
                 # Any live cell with fewer than two live neighbors dies (under-population)
-                if self.grid[row][col] == 1 and (neighbors < 2):
+                if self._grid[row][col] == 1 and (neighbors < 2):
                     new_grid[row][col] = 0
                 # Any live cell with two or three live neighbors lives on to the next generation
-                elif self.grid[row][col] == 1 and (neighbors == 2 or neighbors == 3):
+                elif self._grid[row][col] == 1 and (neighbors == 2 or neighbors == 3):
                     new_grid[row][col] = 1
                 # Any live cell with more than three live neighbors dies (overpopulation)
-                elif self.grid[row][col] == 1 and (neighbors > 3):
+                elif self._grid[row][col] == 1 and (neighbors > 3):
                     new_grid[row][col] = 0
                 # Any dead cell with exactly three live neighbors becomes a live cell (reproduction)
-                elif self.grid[row][col] == 0 and (neighbors == 3):
+                elif self._grid[row][col] == 0 and (neighbors == 3):
                     new_grid[row][col] = 1
-        self.grid = new_grid
+        self._grid = new_grid
+
+    def cell_at(self, row, col):
+        """
+        Get the cell at the specified coordinates.
+        """
+        return self._grid[row][col]
