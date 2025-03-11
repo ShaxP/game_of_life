@@ -1,14 +1,16 @@
 import sys
+
 import pygame
 import pygame_gui
 
 from grid import Grid
 
+
 class GameVisualizer:
     def __init__(self, grid: Grid, cell_size=20, fps=10):
         """
         Initialize the PyGame visualizer.
-        
+
         Args:
             grid (Grid): The grid to visualize
             cell_size (int): Size of each cell in pixels
@@ -39,14 +41,14 @@ class GameVisualizer:
         space = 10
         self.reset_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((x, y), (width, height)),
-            text='Reset',
-            manager=self.gui
+            text="Reset",
+            manager=self.gui,
         )
         y += height + space
         self.pause_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((x, y), (width, height)),
-            text='Resume' if self.paused else 'Pause',
-            manager=self.gui
+            text="Resume" if self.paused else "Pause",
+            manager=self.gui,
         )
 
         # Colors
@@ -66,9 +68,9 @@ class GameVisualizer:
                         col * self.cell_size,
                         row * self.cell_size,
                         self.cell_size - 1,
-                        self.cell_size - 1
+                        self.cell_size - 1,
                     ),
-                    width=0
+                    width=0,
                 )
 
     def draw_grid(self):
@@ -81,7 +83,7 @@ class GameVisualizer:
 
     def loop(self):
         while True:
-            time_delta = self.gui_clock.tick(self.fps)/1000.0
+            time_delta = self.gui_clock.tick(self.fps) / 1000.0
             self.handle_events()
             self.gui.update(time_delta)
             print(f"Paused: {self.paused}, label: {self.pause_button.text}")
@@ -94,12 +96,10 @@ class GameVisualizer:
                 self.grid.next_generation()
                 self.clock.tick(self.fps)
 
-
-
     def handle_events(self):
         """
         Handle PyGame events.
-        
+
         """
 
         for event in pygame.event.get():
@@ -119,16 +119,16 @@ class GameVisualizer:
 
     def toggle_pause(self):
         self.paused = not self.paused
-        self.pause_button.set_text('Resume' if self.paused else 'Pause')
+        self.pause_button.set_text("Resume" if self.paused else "Pause")
         self.gui.update(0.0)
 
     def get_cell_position(self, mouse_pos):
         """
         Convert mouse position to grid coordinates.
-        
+
         Args:
             mouse_pos (tuple): Mouse position in pixels
-            
+
         Returns:
             tuple: Grid coordinates (row, col)
         """
