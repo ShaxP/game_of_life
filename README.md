@@ -15,16 +15,16 @@ This exercise will help you implement Conway's Game of Life using Python and PyG
 1. Clone this repository
 1. Create and activate a virtual environment:
 
-    ```bash
-    # Create virtual environment
-    python -m venv .venv
+   ```bash
+   # Create virtual environment
+   python -m venv .venv
 
-    # Activate virtual environment
-    # On Windows:
-    .venv\Scripts\activate
-    # On macOS/Linux:
-    source .venv/bin/activate
-    ```
+   # Activate virtual environment
+   # On Windows:
+   .venv\Scripts\activate
+   # On macOS/Linux:
+   source .venv/bin/activate
+   ```
 
 1. Install dependencies:
 
