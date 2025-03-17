@@ -32,3 +32,15 @@ def test_next_generation():
         [1, 1, 1],
         [0, 0, 0]
     ]
+
+def test_toggle_cell_at():
+    pattern = [
+        [0, 1],
+    ]
+    grid = Grid.from_matrix(pattern)
+    assert grid.grid[0][0] == 0
+    assert grid.grid[0][1] == 1
+    grid.toggle_cell_at(0, 0)
+    grid.toggle_cell_at(0, 1)
+    assert grid.grid[0][0] == 1
+    assert grid.grid[0][1] == 0

@@ -87,3 +87,9 @@ class Grid:
         Get the cell at the specified coordinates.
         """
         return self._grid[row][col]
+
+    def toggle_cell_at(self, row, col):
+        """
+        Toogles the value of the cell at the specified coordinates
+        """
+        self._grid[row][col] = (self._grid[row][col] + 1) % 2
