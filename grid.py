@@ -12,7 +12,7 @@ class Grid:
         self.rows = rows
         self.cols = cols
         self._grid = None
-        self.initialize_grid()
+        self.clear_grid()
 
     @classmethod
     def from_matrix(cls, matrix):
@@ -30,7 +30,13 @@ class Grid:
         """
         return self._grid
 
-    def initialize_grid(self):
+    def clear_grid(self):
+        """
+        Initialize an empty grid
+        """
+        self._grid = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+
+    def randomize_grid(self):
         """
         Initialize the grid with random live/dead cells.
         Live cells are represented by 1, dead cells by 0.
