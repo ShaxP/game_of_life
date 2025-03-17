@@ -86,7 +86,6 @@ class GameVisualizer:
             time_delta = self.gui_clock.tick(self.fps) / 1000.0
             self.handle_events()
             self.gui.update(time_delta)
-            print(f"Paused: {self.paused}, label: {self.pause_button.text}")
             self.gui.draw_ui(self.screen)
             if not self.running:
                 self.cleanup()
