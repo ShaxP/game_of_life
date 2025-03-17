@@ -4,7 +4,25 @@ def test_grid_initialization():
     grid = Grid(4, 5)
     assert grid.rows == 4
     assert grid.cols == 5
-    assert all(cell in (0, 1) for row in grid.grid for cell in row)
+    assert all(cell == 0 for row in grid.grid for cell in row)
+
+def test_grid_randomization():
+    grid = Grid(4, 5)
+    assert grid.rows == 4
+    assert grid.cols == 5
+    assert all(cell in [0, 1] for row in grid.grid for cell in row)
+
+def test_clear_grid():
+    pattern = [
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 1, 0]
+    ]
+    grid = Grid.from_matrix(pattern)
+    assert grid.cell_at(0, 0) == 0
+    assert grid.cell_at(1, 1) == 1
+    grid.clear_grid()
+    assert all(cell == 0 for row in grid.grid for cell in row)
 
 def test_neighbor_counting():
     # Set up a specific pattern
