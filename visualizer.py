@@ -19,7 +19,7 @@ class GameVisualizer:
         pygame.init()
         self.grid = grid
         self.cell_size = cell_size
-        self.gui_width = 300
+        self.gui_width = 150
         self.width = cell_size * grid.cols + self.gui_width
         self.height = cell_size * grid.rows
         self.screen = pygame.display.set_mode((self.width, self.height))
@@ -91,10 +91,10 @@ class GameVisualizer:
             if not self.running:
                 self.cleanup()
                 sys.exit()
+            self.draw_grid()
             if not self.paused:
-                self.draw_grid()
                 self.grid.next_generation()
-                self.clock.tick(self.fps)
+            self.clock.tick(self.fps)
 
     def handle_events(self):
         """
@@ -138,6 +138,8 @@ class GameVisualizer:
         """
         if mouse_pos:
             x, y = mouse_pos
+            if x < self.gui_width:
+                return None
             return (y // self.cell_size, (x - self.gui_width) // self.cell_size)
         return None
 
