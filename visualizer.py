@@ -115,7 +115,7 @@ class GameVisualizer:
                     self.draw_grid()
             elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == self.reset_button:
-                    self.grid.initialize_grid()
+                    self.grid.randomize_grid()
                 elif event.ui_element == self.pause_button:
                     self.toggle_pause()
             self.gui.process_events(event)
