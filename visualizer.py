@@ -110,6 +110,10 @@ class GameVisualizer:
                     self.toggle_pause()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.mouse_pos = event.pos
+                pos = self.get_cell_position(event.pos)
+                if pos:
+                    self.grid.toggle_cell_at(pos[0], pos[1])
+                    self.draw_grid()
             elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == self.reset_button:
                     self.grid.initialize_grid()
@@ -134,7 +138,7 @@ class GameVisualizer:
         """
         if mouse_pos:
             x, y = mouse_pos
-            return (y // self.cell_size, x // self.cell_size)
+            return (y // self.cell_size, (x - self.gui_width) // self.cell_size)
         return None
 
     def cleanup(self):
