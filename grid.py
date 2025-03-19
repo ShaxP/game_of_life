@@ -99,3 +99,17 @@ class Grid:
         Toogles the value of the cell at the specified coordinates
         """
         self._grid[row][col] = (self._grid[row][col] + 1) % 2
+
+    def load_pattern(self, pattern, row, col):
+        if len(pattern) == 0:
+            return
+        if len(pattern) > self.rows or len(pattern[0]) > self.cols:
+            return
+        if row < 0 or row >= self.rows:
+            return
+        if col < 0 or col >= self.cols:
+            return
+        for r, row_pattern in enumerate(pattern):
+            for c, value in enumerate(row_pattern):
+                if row + r < self.rows and col + c < self.cols:
+                    self._grid[row + r][col + c] = value
