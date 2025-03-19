@@ -2,6 +2,7 @@ import sys
 
 import pygame
 import pygame_gui
+from pygame_gui.elements import UIButton
 
 from grid import Grid
 
@@ -27,34 +28,55 @@ class GameVisualizer:
         self.gui_clock = pygame.time.Clock()
         self.fps = fps
         self.running = True
-        self.paused = False
+        self.paused = True
         self.mouse_pos = None
         self.off_screen = pygame.Surface((self.width, self.height))
         pygame.display.set_caption("Game of Life")
 
         # Gui stuff
         self.gui = pygame_gui.UIManager((self.gui_width, self.height))
+        self.event_handlers = {}
         x = 10
         y = 10
         width = 100
         height = 50
         space = 10
-        self.reset_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((x, y), (width, height)),
-            text="Reset",
-            manager=self.gui,
+        self.pause_button = self.button(
+            self.pause_button_label,
+            x, y, width, height,
+            self.toggle_pause
         )
+
         y += height + space
-        self.pause_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((x, y), (width, height)),
-            text="Resume" if self.paused else "Pause",
-            manager=self.gui,
+        self.button(
+            "Clear",
+            x, y, width, height,
+            self.clear_grid
+        )
+
+        y += height + space
+        self.button(
+            "Randomize",
+            x, y, width, height,
+            self.randomize_grid
         )
 
         # Colors
         self.fg_color = (0, 0, 0)
         self.bg_color = (255, 255, 255)
         self.cell_border_color = (192, 192, 192)
+
+    @property
+    def pause_button_label(self) -> str:
+        return "Resume" if self.paused else "Pause"
+
+    def button(self, label: str, x, y, width, height, event_handler) -> UIButton:
+        button = UIButton(
+            relative_rect=pygame.Rect((x, y), (width, height)),
+            text=label, manager=self.gui
+        )
+        self.event_handlers[button] = event_handler
+        return button
 
     def draw_cells(self):
         self.off_screen.fill(self.cell_border_color)
@@ -106,7 +128,7 @@ class GameVisualizer:
                 self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    self.toggle_pause()
+                    self.toggle_pause(self.pause_button)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.mouse_pos = event.pos
                 pos = self.get_cell_position(event.pos)
@@ -114,16 +136,21 @@ class GameVisualizer:
                     self.grid.toggle_cell_at(pos[0], pos[1])
                     self.draw_grid()
             elif event.type == pygame_gui.UI_BUTTON_PRESSED:
-                if event.ui_element == self.reset_button:
-                    self.grid.randomize_grid()
-                elif event.ui_element == self.pause_button:
-                    self.toggle_pause()
+                if event.ui_element in self.event_handlers:
+                    handler = self.event_handlers[event.ui_element]
+                    handler(event.ui_element)
             self.gui.process_events(event)
 
-    def toggle_pause(self):
+    def toggle_pause(self, button):
         self.paused = not self.paused
-        self.pause_button.set_text("Resume" if self.paused else "Pause")
+        button.set_text(self.pause_button_label)
         self.gui.update(0.0)
+
+    def clear_grid(self, _):
+        self.grid.clear_grid()
+
+    def randomize_grid(self, _):
+        self.grid.randomize_grid()
 
     def get_cell_position(self, mouse_pos):
         """
